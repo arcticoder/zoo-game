@@ -1,5 +1,10 @@
 # zoo-game
 
+## Seeding
+php artisan migrate --seed
+
+Initial seed is 15 animals of 3 different types, see database/seeds/AnimalTableSeeder.php
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img width="150"src="https://laravel.com/laravel.png"></a></p>
 
 <p align="center">
