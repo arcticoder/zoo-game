@@ -23,36 +23,43 @@ class AnimalController extends Controller
      */
     public function incrementHunger() {
         $animals = Animal::where('state', '!=', 'dead')->get();
+
         $died = 0;
         $dying = 0;
+        $isGameOver = false;
 
-        foreach ($animals as $animal) {
-            if ($animal->title == 'elephant' && $animal->health < 0.7) {
-                $animal->state = 'dead';
-                $died++;
-            } else {
-                $animal->health -= (rand(0, 20) / 100);
-
+        if (sizeof($animals) > 0) {
+            foreach ($animals as $animal) {
                 if ($animal->title == 'elephant' && $animal->health < 0.7) {
-                    $animal->state = 'cannot_walk';
-                    $dying++;
-                } else if ($animal->title == 'monkey' && $animal->health < 0.3) {
-                    $animal->state = 'dead';
-                    $died++;
-                } else if ($animal->title == 'giraffe' && $animal->health < 0.5) {
                     $animal->state = 'dead';
                     $died++;
                 } else {
-                    $dying++;
-                }
-            }
+                    $animal->health -= (rand(0, 20) / 100);
 
-            $animal->save();
+                    if ($animal->title == 'elephant' && $animal->health < 0.7) {
+                        $animal->state = 'cannot_walk';
+                        $dying++;
+                    } else if ($animal->title == 'monkey' && $animal->health < 0.3) {
+                        $animal->state = 'dead';
+                        $died++;
+                    } else if ($animal->title == 'giraffe' && $animal->health < 0.5) {
+                        $animal->state = 'dead';
+                        $died++;
+                    } else {
+                        $dying++;
+                    }
+                }
+
+                $animal->save();
+            }
+        } else {
+            $isGameOver = true;
         }
 
         return response()->json([
             'died' => $died,
-            'dying' => $dying
+            'dying' => $dying,
+            'game_over' => $isGameOver
         ]);
     }
 

@@ -24,5 +24,7 @@
                 <% animal %>
             </li>
         </ul>
+        <button ng-click="timeForward()">Move time forward</button>
+        <button ng-click="feed()">Feed</button>
     </body>
 </html>

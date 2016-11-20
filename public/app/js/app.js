@@ -1,18 +1,40 @@
 
 
-var app = angular.module('zoo', [],/*, ["ui.grid"]*/ function($interpolateProvider) {
+var app = angular.module('zoo', [], function($interpolateProvider) {
     $interpolateProvider.startSymbol('<%');
     $interpolateProvider.endSymbol('%>');
-});
-
-app.controller('zooCtrl', ['$scope', '$http', function($scope, $http) {
+}).controller('zooCtrl', ['$scope', '$http', '$interval', function($scope, $http, $interval) {
     $scope.animals = [];
-    $scope.init = function() {
+
+    let reloadAnimals = function() {
         $scope.loading = true;
         $http.get('/api/animal/index').
+            success(function(data, status, headers, config) {
+                $scope.animals = data;
+                $scope.loading = false;
+            });
+    }
+
+    $scope.init = reloadAnimals;
+
+    $scope.timeForward = function() {
+        $http.get('/api/animal/hungrier').
         success(function(data, status, headers, config) {
-            $scope.animals = data;
-            $scope.loading = false;
+            if (!data.game_over) {
+                reloadAnimals();
+            } else {
+                console.log('game over');
+                $interval.cancel(fastForwardInterval);
+            }
         });
     }
+
+    $scope.feed = function() {
+        $http.get('/api/animal/feed').
+        success(function(data, status, headers, config) {
+            reloadAnimals();
+        });
+    }
+
+    let fastForwardInterval = $interval($scope.timeForward, 1000);
 }]);
