@@ -15,6 +15,11 @@ var app = angular.module('zoo', [], function($interpolateProvider) {
             });
     }
 
+    let playGame = function() {
+        console.log('game start');
+        $scope.fastForwardInterval = $interval($scope.timeForward, 1000);
+    }
+
     $scope.init = reloadAnimals;
 
     $scope.timeForward = function() {
@@ -24,7 +29,7 @@ var app = angular.module('zoo', [], function($interpolateProvider) {
                 reloadAnimals();
             } else {
                 console.log('game over');
-                $interval.cancel(fastForwardInterval);
+                $interval.cancel($scope.fastForwardInterval);
             }
         });
     }
@@ -36,5 +41,13 @@ var app = angular.module('zoo', [], function($interpolateProvider) {
         });
     }
 
-    let fastForwardInterval = $interval($scope.timeForward, 1000);
+    $scope.revive = function() {
+        $http.get('/api/animal/revive').
+        success(function(data, status, headers, config) {
+            reloadAnimals();
+            playGame();
+        });
+    }
+
+    playGame();
 }]);
