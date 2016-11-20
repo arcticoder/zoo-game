@@ -5,6 +5,13 @@ php artisan migrate --seed
 
 Initial seed is 15 animals of 3 different types, see database/seeds/AnimalTableSeeder.php
 
+## API
+There's only 4 REST services. See app/Http/Controllers/AnimalController.php:
+- GET animal/index -- Lists all animals and their states
+- GET animal/hungrier -- Decreases health of animals still living randomly
+- GET animal/revive -- Revives all animals and resets their states
+- GET animal/feed -- Feeds all animals with health < 100% randomly
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img width="150"src="https://laravel.com/laravel.png"></a></p>
 
 <p align="center">

@@ -17,4 +17,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
 
-Route::resource('/animal','AnimalController');
+Route::get('animal/index', 'AnimalController@index');
+Route::get('animal/hungrier', 'AnimalController@incrementHunger');
+Route::get('animal/revive', 'AnimalController@revive');
+Route::get('animal/feed', 'AnimalController@feed');
