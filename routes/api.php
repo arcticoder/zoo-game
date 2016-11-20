@@ -18,6 +18,6 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:api');
 
 Route::get('animal/index', 'AnimalController@index');
-Route::get('animal/hungrier', 'AnimalController@incrementHunger');
+Route::get('animal/hungrier', 'AnimalController@incrementHunger')->middleware('throttle:999999');
 Route::get('animal/revive', 'AnimalController@revive');
 Route::get('animal/feed', 'AnimalController@feed');

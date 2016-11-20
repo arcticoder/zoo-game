@@ -13,7 +13,18 @@ class AnimalController extends Controller
      * @return Response
      */
     public function index() {
-        return Animal::all();
+        $livingAnimals = Animal::where('state', '!=', 'dead')->count();
+
+        if ($livingAnimals == 0) {
+            $gameState = 'game_over';
+        } else {
+            $gameState = 'game_on';
+        }
+
+        return response()->json([
+            'animals' => Animal::all(),
+            'game_state' => $gameState
+        ]);
     }
 
     /**
@@ -56,10 +67,17 @@ class AnimalController extends Controller
             $isGameOver = true;
         }
 
+        if ($isGameOver) {
+            $gameState = 'game_over';
+        } else {
+            $gameState = 'game_on';
+        }
+
+
         return response()->json([
             'died' => $died,
             'dying' => $dying,
-            'game_over' => $isGameOver
+            'game_state' => $gameState
         ]);
     }
 

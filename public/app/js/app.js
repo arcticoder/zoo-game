@@ -12,7 +12,7 @@ var app = angular.module('zoo', [], function($interpolateProvider) {
         $http.get('/api/animal/index').
             success(function(data, status, headers, config) {
                 $scope.animals = [];
-                for (let animal of data) {
+                for (let animal of data.animals) {
                     let health = Math.round(animal.health * 100) + '%';
                     $scope.animals.push({
                         'title': animal.title,
@@ -21,13 +21,14 @@ var app = angular.module('zoo', [], function($interpolateProvider) {
                         'label': health + ' ' + animal.state.replace('_', ' ')
                     });
                 }
+                $scope.gameState = data.game_state;
                 $scope.loading = false;
             });
     }
 
     let playGame = function() {
         console.log('game start');
-        $scope.fastForwardInterval = $interval($scope.timeForward, 1000);
+        $scope.fastForwardInterval = $interval($scope.timeForward, 1000*60*60);
     }
 
     $scope.init = reloadAnimals;
@@ -35,11 +36,13 @@ var app = angular.module('zoo', [], function($interpolateProvider) {
     $scope.timeForward = function() {
         $http.get('/api/animal/hungrier').
         success(function(data, status, headers, config) {
-            if (!data.game_over) {
+            $scope.gameState = data.game_state;
+
+            if (data.game_state == 'game_on') {
                 reloadAnimals();
             } else {
                 console.log('game over');
-                $scope.gameState = 'game_over';
+
                 $interval.cancel($scope.fastForwardInterval);
             }
         });
