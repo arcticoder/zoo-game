@@ -5,12 +5,22 @@ var app = angular.module('zoo', [], function($interpolateProvider) {
     $interpolateProvider.endSymbol('%>');
 }).controller('zooCtrl', ['$scope', '$http', '$interval', function($scope, $http, $interval) {
     $scope.animals = [];
+    $scope.gameState = 'game_on';
 
     let reloadAnimals = function() {
         $scope.loading = true;
         $http.get('/api/animal/index').
             success(function(data, status, headers, config) {
-                $scope.animals = data;
+                $scope.animals = [];
+                for (let animal of data) {
+                    let health = Math.round(animal.health * 100) + '%';
+                    $scope.animals.push({
+                        'title': animal.title,
+                        'health': health,
+                        'state': animal.state,
+                        'label': health + ' ' + animal.state.replace('_', ' ')
+                    });
+                }
                 $scope.loading = false;
             });
     }
@@ -29,6 +39,7 @@ var app = angular.module('zoo', [], function($interpolateProvider) {
                 reloadAnimals();
             } else {
                 console.log('game over');
+                $scope.gameState = 'game_over';
                 $interval.cancel($scope.fastForwardInterval);
             }
         });
@@ -45,6 +56,7 @@ var app = angular.module('zoo', [], function($interpolateProvider) {
         $http.get('/api/animal/revive').
         success(function(data, status, headers, config) {
             reloadAnimals();
+            $scope.gameState = 'game_on';
             playGame();
         });
     }
