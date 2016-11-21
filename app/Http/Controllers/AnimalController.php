@@ -125,6 +125,10 @@ class AnimalController extends Controller
                 $animal->health = 1.0;
             }
 
+            if ($animal->title == 'elephant' && $animal->health >= 0.7) {
+                $animal->state = 'can_walk';
+            }
+
             if ($animal->health == 1.0) {
                 $full++;
             }
