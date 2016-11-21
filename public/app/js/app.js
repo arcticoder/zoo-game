@@ -1,5 +1,6 @@
-
-
+/**
+ * Zoo game/simulator - Time moves forwards every hour, otherwise can be moved forward manually, which calls api/hungrier. Reload button calls api/revive, feed button calls api/feed. Game ends when all animals have perished.
+ */
 var app = angular.module('zoo', [], function($interpolateProvider) {
     $interpolateProvider.startSymbol('<%');
     $interpolateProvider.endSymbol('%>');

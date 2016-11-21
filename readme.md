@@ -5,6 +5,10 @@ php artisan migrate --seed
 
 Initial seed is 15 animals of 3 different types, see database/seeds/AnimalTableSeeder.php
 
+## Front-end
+- public/app/js/app.js
+- resources/views/index.blade.php
+
 ## API
 There's only 4 REST services. See app/Http/Controllers/AnimalController.php:
 - GET animal/index -- Lists all animals and their states
